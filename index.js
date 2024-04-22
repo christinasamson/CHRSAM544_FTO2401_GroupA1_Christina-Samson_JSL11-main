@@ -1,5 +1,5 @@
 // TASK: import helper functions from utils
-import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunction.js';
+import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js'; // Or: import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js';
 // TASK: import initialData
 import { initialData } from './initialData.js';
 
@@ -18,6 +18,8 @@ function initializeData() {
   }
 }
 
+initializeData();
+
 // TASK: Get elements from the DOM
 const elements = {
   headerBoardName: document.getElementById('header-board-name'),
@@ -29,7 +31,12 @@ const elements = {
   editTaskModal: document.querySelector('.edit-task-modal-window'),
   cancelEditBtn: document.getElementById('cancel-edit-btn'),
   cancelAddTaskBtn: document.getElementById('cancel-add-task-btn'),
-  filterDiv: document.getElementById('filterDiv')
+  filterDiv: document.getElementById('filterDiv'),
+
+  
+  createTaskBtn: document.getElementById("create-task-btn"),
+  columnDivs: document.querySelectorAll('.column-div')
+
 };
 
 let activeBoard = "";
@@ -120,7 +127,7 @@ function styleActiveBoard(boardName) {
 
 
 function addTaskToUI(task) {
-  const column = document.querySelector('.column-div[data-status="${task.status}"]'); 
+  const column = document.querySelector(`.column-div[data-status="${task.status}"]`); 
   if (!column) {
     console.error(`Column not found for status: ${task.status}`);
     return;
@@ -139,7 +146,7 @@ function addTaskToUI(task) {
   taskElement.textContent = task.title; // Modify as needed
   taskElement.setAttribute('data-task-id', task.id);
   
-  tasksContainer.appendChild(); 
+  tasksContainer.appendChild(taskElement); 
 }
 
 
@@ -216,27 +223,29 @@ function addTask(event) {
 }
 
 
-function toggleSidebarDisplay(show) {
-  const sidebarElement = document.getElementById('side-bar-div');
-  const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svgElement.setAttribute('width', '19');
-  svgElement.setAttribute('height', '19');
+function toggleSidebar(show) {
+   const sidebarElement = document.getElementById('side-bar-div');
+//   const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+//   svgElement.setAttribute('width', '19');
+//   svgElement.setAttribute('height', '19');
   
-  const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  textElement.setAttribute('x', '2');
-  textElement.setAttribute('y', '15');
-  textElement.setAttribute('font-size', '14');
-  textElement.setAttribute('fill', '#828FA3');
-  textElement.textContent = '👀';
+//   const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+//   textElement.setAttribute('x', '2');
+//   textElement.setAttribute('y', '15');
+//   textElement.setAttribute('font-size', '14');
+//   textElement.setAttribute('fill', '#828FA3');
+//   textElement.textContent = '👀';
 
-  svgElement.appendChild(textElement);
+//   svgElement.appendChild(textElement);
 
   if (show) {
     sidebarElement.style.display = 'block';
-    sidebarElement.appendChild(svgElement);
+    elements.showSideBarBtn.style.display = "none";
+    //sidebarElement.appendChild(svgElement);
   } else {
     sidebarElement.style.display = 'none';
-    sidebarElement.removeChild(svgElement);
+    elements.showSideBarBtn.style.display = "block";
+    // sidebarElement.removeChild(svgElement);
   }
 
   localStorage.setItem('showSideBar', show);
