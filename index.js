@@ -230,24 +230,22 @@ function addTask(event) {
     event.target.reset();
 
 
-
-
-
     initialData.push(newTask);
-    initialData.pop();
+    // initialData.pop();
     localStorage.setItem('tasks',JSON.stringify(initialData));
-    //putTask(newTask);
+    putTask(newTask);
     refreshTasksUI();
+    saveTaskChanges(taskId)
+  
   }
 }
-
 
 function toggleSidebar(show) {
    const sidebarElement = document.getElementById('side-bar-div');
 
 
   if (show) {
-    sidebarElement.style.display = 'block';
+    sidebarElement.style.display = 'flex';
     elements.showSideBarBtn.style.display = "none";
     //sidebarElement.appendChild(svgElement);
   } else {
@@ -262,9 +260,45 @@ function toggleSidebar(show) {
 
 
 function toggleTheme() {
+  // Toggle the 'light-theme' class on the body element
   document.body.classList.toggle('light-theme');
+  
+  // Save the theme preference to localStorage
   localStorage.setItem('light-theme', document.body.classList.contains('light-theme') ? 'enabled' : 'disabled');
+  
+  // Get the image element
+  const logo = document.getElementById('logo');
+  
+  // Check if the body has the 'light-theme' class
+  const isLightTheme = document.body.classList.contains('light-theme');
+  
+  // Update the src attribute of the image based on the theme
+  if (isLightTheme) {
+    logo.src = './assets/logo-light.svg'; // Set the src for light theme
+  } else {
+    logo.src = './assets/logo-dark.svg'; // Set the src for dark theme
+  }
+
+
+ 
+
 }
+
+// function toggleTheme(){
+//   const logoDiv = document.querySelector('.side-logo-div');
+
+//     if(document.body.classList  === 'light-theme'){
+//          alert('white');
+//          console.log(logoDiv)
+
+//     }else{
+        
+//     }
+// }
+
+
+// toggleTheme()
+
 
 
 
@@ -319,8 +353,6 @@ function saveTaskChanges(taskId) {
   toggleModal(false, elements.editTaskModal); // Assuming you have a function to close the modal
   refreshTasksUI();
 }
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
   init(); // init is called after the DOM is fully loaded
