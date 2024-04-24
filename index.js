@@ -1,5 +1,5 @@
 // TASK: import helper functions from utils
-import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js'; // Or: import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js';
+import { getTasks, createNewTask, patchTask, deleteTask ,putTask} from './utils/taskFunctions.js'; // Or: import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js';
 // TASK: import initialData
 import { initialData } from './initialData.js';
 
@@ -233,9 +233,10 @@ function addTask(event) {
     initialData.push(newTask);
     // initialData.pop();
     localStorage.setItem('tasks',JSON.stringify(initialData));
-    putTask(newTask);
+ 
     refreshTasksUI();
-    saveTaskChanges(taskId)
+    saveTaskChanges(task.id)
+    // putTask(newTask)
   
   }
 }
@@ -284,20 +285,7 @@ function toggleTheme() {
 
 }
 
-// function toggleTheme(){
-//   const logoDiv = document.querySelector('.side-logo-div');
 
-//     if(document.body.classList  === 'light-theme'){
-//          alert('white');
-//          console.log(logoDiv)
-
-//     }else{
-        
-//     }
-// }
-
-
-// toggleTheme()
 
 
 
