@@ -210,35 +210,34 @@ function toggleModal(show, modal = elements.modalWindow) {
  * **********************************************************************************************************************************************/
 
 function addTask(event) {
-  event.preventDefault(); 
+  event.preventDefault();
 
-  //Assign user input to the task object
-  function addTask(event) {
-    event.preventDefault(); 
-  
-    // Get task details from the form
-    const title = document.getElementById('title-input').value;
-    const description = document.getElementById('desc-input').value;
-    const status = document.getElementById('select-status').value;
-  
-    // Create task object with user input
-    const task = {
-      title: title,
-      description: description,
-      status: status
-    };
-    
-    // Create new task element
-    const newTask = createNewTask(task);
-    
-    // Add the new task element to the UI
-    if (newTask) {
-      addTaskToUI(newTask);
-      toggleModal(false);
-      elements.filterDiv.style.display = 'none'; // Also hide the filter overlay
-      event.target.reset(); // Reset the form
-      refreshTasksUI();
-    }
+  // Assign user input to the task object
+  const task = {
+    title: document.getElementById("title-input").value,
+    description: document.getElementById("desc-input").value,
+    status: document.getElementById("select-status").value,
+    board:activeBoard
+  };
+
+  const newTask = createNewTask(task);
+  if (newTask) {
+    addTaskToUI(newTask);
+    toggleModal(false);
+    newTask.board = activeBoard;
+    initialData.push(newTask);
+    elements.filterDiv.style.display = "none"; // Also hide the filter overlay
+    event.target.reset();
+
+
+
+
+
+    initialData.push(newTask);
+    initialData.pop();
+    localStorage.setItem('tasks',JSON.stringify(initialData));
+    //putTask(newTask);
+    refreshTasksUI();
   }
 }
 
@@ -271,39 +270,53 @@ function toggleTheme() {
 
 function openEditTaskModal(task) {
   // Set task details in modal inputs
-  elements.editTaskTitleInput.value = task.title;
-  elements.editTaskDueDateInput.value = task.dueDate;
-  elements.editTaskPriorityInput.value = task.priority;
-  elements.editTaskDescriptionTextArea.value = task.description;
+  const titleInput = document.getElementById("edit-task-title-input");
+  const descInput = document.getElementById("edit-task-desc-input");
+  const statusSelect = document.getElementById("edit-select-status");
 
   // Get button elements from the task modal
-  const saveChangesBtn = elements.editTaskModal.querySelector('#save-task-changes-btn');
-  const deleteTaskBtn = elements.editTaskModal.querySelector('#delete-task-btn');
+  titleInput.value = task.title;
+  descInput.value = task.description;
+  statusSelect.value = task.status;
 
   // Call saveTaskChanges upon click of Save Changes button
-  saveChangesBtn.onclick = () => saveTaskChanges(task._id);
+  const saveTaskChangesBtn = document.getElementById("save-task-changes-btn");
+  const deleteTaskBtn = document.getElementById("delete-task-btn");
+
+  saveTaskChangesBtn.addEventListener("click", () => {
+    saveTaskChanges(task.id);
+    // No need to reload the page, just refresh the UI
+    refreshTasksUI();
+    toggleModal(false, elements.editTaskModal);
+  });
 
   // Delete task using a helper function and close the task modal
-  deleteTaskBtn.onclick = () => {
-    deleteTask(task._id);
+  deleteTaskBtn.addEventListener("click", () => {
+    deleteTask(task.id);
+    // No need to reload the page, just refresh the UI
+    refreshTasksUI();
     toggleModal(false, elements.editTaskModal);
-  };
+  });
 
   toggleModal(true, elements.editTaskModal); // Show the edit task modal
 }
-
 function saveTaskChanges(taskId) {
-  // Get new user inputs
-  
+  const updatedTitle = document.getElementById("edit-task-title-input").value;
+  const updatedDescription = document.getElementById("edit-task-desc-input").value;
+  const updatedStatus = document.getElementById("edit-select-status").value;
 
-  // Create an object with the updated task details
+  const updatedTask = {
+    id: taskId,
+    title: updatedTitle,
+    description: updatedDescription,
+    status: updatedStatus
+  };
 
-
-  // Update task using a hlper functoin
- 
+  // Update task using a helper function (assuming you have a function named `updateTask`)
+  patchTask(taskId, updatedTask);
 
   // Close the modal and refresh the UI to reflect the changes
-
+  toggleModal(false, elements.editTaskModal); // Assuming you have a function to close the modal
   refreshTasksUI();
 }
 
@@ -311,7 +324,7 @@ function saveTaskChanges(taskId) {
 
 document.addEventListener('DOMContentLoaded', function() {
   init(); // init is called after the DOM is fully loaded
-});f
+});
 
 function init() {
   setupEventListeners();
