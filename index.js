@@ -60,7 +60,7 @@ function fetchAndDisplayBoardsAndTasks() {
 }
 
 // Creates different boards in the DOM
-// TASK: Fix Bugs
+// displayBoards, is responsible for dynamically generating and displaying buttons for each board in a given array of boards
 
 function displayBoards(boards) {
   const boardsContainer = document.getElementById("boards-nav-links-div");
@@ -299,37 +299,44 @@ function setThemeFromLocalStorage() {
 
 
 function openEditTaskModal(task) {
+  const editModal = elements.editTaskModal;
+
   // Set task details in modal inputs
   const titleInput = document.getElementById("edit-task-title-input");
   const descInput = document.getElementById("edit-task-desc-input");
   const statusSelect = document.getElementById("edit-select-status");
 
-  // Get button elements from the task modal
   titleInput.value = task.title;
   descInput.value = task.description;
   statusSelect.value = task.status;
 
-  // Call saveTaskChanges upon click of Save Changes button
-  const saveTaskChangesBtn = document.getElementById("save-task-changes-btn");
+  const saveChangesBtn = document.getElementById("save-task-changes-btn");
   const deleteTaskBtn = document.getElementById("delete-task-btn");
 
-  saveTaskChangesBtn.addEventListener("click", () => {
+  // Remove any existing event listeners to avoid duplication
+  saveChangesBtn.removeEventListener("click", saveChangesHandler);
+  deleteTaskBtn.removeEventListener("click", deleteTaskHandler);
+
+  // Define event listener functions
+  function saveChangesHandler() {
     saveTaskChanges(task.id);
-    // No need to reload the page, just refresh the UI
+    toggleModal(false, editModal);
     refreshTasksUI();
-    toggleModal(false, elements.editTaskModal);
-  });
+  }
 
-  // Delete task using a helper function and close the task modal
-  deleteTaskBtn.addEventListener("click", () => {
+  function deleteTaskHandler() {
     deleteTask(task.id);
-    // No need to reload the page, just refresh the UI
+    toggleModal(false, editModal);
     refreshTasksUI();
-    toggleModal(false, elements.editTaskModal);
-  });
+  }
 
-  toggleModal(true, elements.editTaskModal); // Show the edit task modal
+  // Attach event listeners to buttons
+  saveChangesBtn.addEventListener("click", saveChangesHandler);
+  deleteTaskBtn.addEventListener("click", deleteTaskHandler);
+
+  toggleModal(true, editModal);
 }
+
 
 function saveTaskChanges(taskId) {
   // Get new user inputs
