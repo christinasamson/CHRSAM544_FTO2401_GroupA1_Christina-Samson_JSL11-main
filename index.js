@@ -1,5 +1,5 @@
 // TASK: import helper functions from utils
-import { getTasks, createNewTask, patchTask, deleteTask, putTask } from './utils/taskFunctions.js'; // Or: import { getTasks, createNewTask, patchTask, deleteTask } from './utils/taskFunctions.js';
+import { getTasks, createNewTask, patchTask, deleteTask, putTask } from './utils/taskFunctions.js'; 
 // TASK: import initialData
 import { initialData } from './initialData.js';
 
@@ -41,7 +41,7 @@ const elements = {
   columnDivs: document.querySelectorAll('.column-div')
 
 };
-
+//This variable is declared but not immediately assigned a value.
 let activeBoard = "";
 
 // Extracts unique board names from tasks
