@@ -98,6 +98,7 @@ function filterAndDisplayTasksByBoard(boardName) {
     const tasksContainer = document.createElement("div");
     column.appendChild(tasksContainer);
 
+    //iterates over each task in the filteredTasks array and creates a new task element for each task that matches the status of the current column.
     filteredTasks.filter(task => task.status === status).forEach(task => {
       const taskElement = document.createElement("div");
       taskElement.classList.add("task-div");
@@ -219,7 +220,9 @@ function addTask(event) {
     status: document.getElementById("select-status").value,
     board:activeBoard
   };
-
+//this part updates the newTask object's board property with the value of activeBoard. 
+//It then pushes the new task into the initialData array, hides the filter overlay, 
+//resets the form, and updates the local storage with the updated initialData array.
   const newTask = createNewTask(task);
   if (newTask) {
     addTaskToUI(newTask);
@@ -395,6 +398,8 @@ document.addEventListener('DOMContentLoaded', function() {
   init(); // init is called after the DOM is fully loaded
 });
 
+
+//initialization function for a web application. It does the following:
 function init() {
   setupEventListeners();
   const showSidebar = localStorage.getItem('showSideBar') === 'true';
